@@ -29,7 +29,7 @@ public class Communication {
 
         String regex = "\\ban? .*";
         // Anything containing "a" or "an"
-        if (sentence.contains(regex)){
+        if (sentence.matches(regex)){
             return sentence;
         }
 
@@ -41,10 +41,7 @@ public class Communication {
         char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 
 
-        if(charArrayContains(vowels, noun.charAt(0))){
-            return true;
-        }
-        return false;
+        return charArrayContains(vowels, noun.charAt(0));
     }
 
     public static boolean charArrayContains(char[] arr, char key){
@@ -68,7 +65,7 @@ public class Communication {
         String[] positiveResponses = {"y", "yes", "yeah", "yep", "sure", "right", "affirmative", "correct", "indeed", "you bet", "exactly", "you said it"};
         String[] negativeResponses = {"n", "no", "no way", "nah", "nope", "negative", "I don't think so", "yeah no"};
         //Cleaning response in case of punctuation and capitalization
-        response = response.trim().toLowerCase().replaceFirst("\\.|\\!", "");
+        response = response.trim().toLowerCase().replaceFirst("[.!]", "");
         // regex expression means replace any period or exclamation with empty space
 
 
@@ -92,5 +89,22 @@ public class Communication {
         System.out.println(clarifications[rnd]);
 
 
+    }
+
+    public static void dontStop(){
+        while(true){
+            String response = input.nextLine();
+
+            if(Communication.confirmation(response).equals("positive")){
+                System.out.println("You answered: Yes");
+                break;
+            } else if (Communication.confirmation(response).equals("negative")) {
+                System.out.println("You answered: No");
+                break;
+            } else {
+                Communication.clarification();
+
+            }
+        }
     }
 }
