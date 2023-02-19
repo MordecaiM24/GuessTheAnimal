@@ -33,8 +33,8 @@ public class Communication {
         fact = fact.replaceAll("[?.!]", "");
         String question = question(fact);
         System.out.println("Is it correct for " + sent2 + "?");
-        String factPos = dontStop() ? definite(sent2) : definite(sent1);
-        String factNeg = factPos.equals(definite(sent1)) ? definite(sent2) : definite(sent1);
+        String factPos = dontStop() ? sent2 : sent1;
+        String factNeg = factPos.equals(sent1) ? sent2 : sent1;
 
         animalInfo.put("fact", fact);
         animalInfo.put("true", factPos);

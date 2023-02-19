@@ -1,8 +1,8 @@
 package animals;
 
 import java.util.Scanner;
-import java.util.HashMap;
 import java.util.Queue;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class BinaryTree {
@@ -10,8 +10,10 @@ public class BinaryTree {
 
     Node root;
 
-    public BinaryTree(String question){
-        this.root = new Node(question);
+    public BinaryTree(HashMap<String, String> initial){
+        this.root = new Node(initial.get("question"));
+        root.left = new Node (initial.get("false"));
+        root.right = new Node (initial.get("true"));
     }
 
     class Node {
@@ -37,20 +39,34 @@ public class BinaryTree {
     }
 
 
-    public void replace(HashMap<String, String> info) {
-        Node current = new Node(info.get("question"));
+    public void replace(HashMap<String, String> info, Node current) {
+        current.value = info.get("question");
         current.left = new Node(info.get("false"));
         current.right = new Node(info.get("true"));
-
-        root = current;
     }
 
 
-    public String getAnimal(String animal) {
-        return containsNodeRecursive(root);
+    public void getAnimal() {
+        Node expected = containsNodeRecursive(root);
+        System.out.println("Is your animal " + expected.value);
+        if(input.nextLine().equals("no")) {
+            System.out.println("I give up. What animal do you have in mind?");
+
+            HashMap<String, String> facts = Communication.animalInfo(expected.value, input.nextLine());
+            System.out.println("I learned the following facts about animals: ");
+            System.out.println(" - The " + facts.get("true") + " " + facts.get("fact"));
+            System.out.println(" - The " + facts.get("false") + " " + Communication.negate(facts.get("fact")));
+            System.out.print("I can distinguish these animals by asking the question: \n - ");
+            System.out.println(facts.get("question") + "\n");
+
+            replace(facts,expected);
+
+        }
+        System.out.println("Nice! I've learned so much about animals!\n");
+        System.out.println("Would you like to play again");
     }
 
-    private String containsNodeRecursive (Node current) {
+    private Node containsNodeRecursive (Node current) {
         if (!isLeaf(current)){
             System.out.println(current.getValue());
             String answer = input.nextLine().toLowerCase();
@@ -58,7 +74,7 @@ public class BinaryTree {
                     containsNodeRecursive(current.left) :
                     containsNodeRecursive(current.right);
         } else {
-            return current.value;
+            return current;
         }
 
     }
